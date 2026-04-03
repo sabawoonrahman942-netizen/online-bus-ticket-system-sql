@@ -81,7 +81,93 @@ Proje; **veri bütünlüğü**, **hata yönetimi** ve **performans** odaklı gel
 ---
 
 ## 📁 Dosya Yapısı
+📦 online-bus-ticket-system-sql
 
+┣ 📜 1_DDL_Veritabani.sql          → Veritabanı oluşturma (Turkish_CI_AS)
+
+┣ 📜 2_DDL_Tablolar.sql            → 6 tablo + tüm kısıt tanımları
+
+┣ 📜 3_DML_OrnekVeriler.sql        → Örnek veri (5 şehir, 3 otobüs, 5 kullanıcı...)
+
+┣ 📜 4_T-SQL_View_Prosedurler.sql  → 1 VIEW + 3 Stored Procedure
+
+┣ 📜 5_Test_Sorgulari.sql          → 9 test sorgusu (başarılı + hata senaryoları)
+
+
+---
+
+## ⚙️ Kurulum
+
+> ⚠️ **Gereksinimler:** Microsoft SQL Server 2025 Express + SSMS
+
+1. Repo'yu klonla:
+
+
+2. SSMS'i aç ve dosyaları **sırayla** çalıştır `(F5)`:
+
+ 1_DDL_Veritabani.sql
+
+2_DDL_Tablolar.sql
+
+3_DML_OrnekVeriler.sql
+
+4_T-SQL_View_Prosedurler.sql
+
+5_Test_Sorgulari.sql
+
+---
+
+## 🧪 Örnek Kullanım
+-- 1. İstanbul → Ankara seferlerini ara (boş koltuk sayısıyla birlikte)
+
+EXEC sp_SeferAra
+
+@KalkisSehir = 'İstanbul',
+
+@VarisSehir  = 'Ankara',
+
+@SeferTarihi = '2026-05-10';
+
+-- 2. Güvenli bilet satın al
+
+EXEC sp_BiletSatinal @TripID = 1, @UserID = 1, @SeatNumber = 7;
+
+-- 3. Hata senaryosu: Dolu koltuğa bilet alma (HATA VERİR)
+
+EXEC sp_BiletSatinal @TripID = 1, @UserID = 2, @SeatNumber = 7;
+
+-- >> HATA: Bu koltuk zaten satılmış durumda!
+
+-- 4. Tüm bilet detaylarını görüntüle
+
+SELECT * FROM vw_BiletDetaylari;
+
+-- 5. Bilet iptal et
+
+EXEC sp_BiletIptal @TicketID = 1, @UserID = 1;
+
+
+---
+
+## 📊 Örnek Çıktı — `vw_BiletDetaylari`
+
+| TicketID | Yolcu | Kalkış | Varış | Koltuk | Fiyat | Durum |
+|---|---|---|---|---|---|---|
+| 1 | Ahmet Yılmaz | İstanbul / Esenler | Ankara / AŞTİ | 5 | 500.00 ₺ | Active |
+| 2 | Ayşe Demir | İstanbul / Esenler | Ankara / AŞTİ | 10 | 500.00 ₺ | Active |
+
+---
+
+## 👤 Geliştirici
+
+<div align="center">
+
+**Rahman**  
+[@sabawoonrahman942-netizen](https://github.com/sabawoonrahman942-netizen)
+
+⭐ Bu projeyi beğendiyseniz **star** vermeyi unutmayın!
+
+</div>
 
 
 
