@@ -41,5 +41,48 @@ Proje; **veri bütünlüğü**, **hata yönetimi** ve **performans** odaklı gel
 ## 🗃️ Veritabanı Mimarisi
 
 
+| Tablo | Açıklama | Kayıt Türü |
+|---|---|---|
+| `Cities` | Şehir bilgileri | Referans |
+| `Terminals` | Terminaller / Otogarlar | Referans |
+| `Buses` | Otobüs bilgileri (plaka, kapasite, tip) | Referans |
+| `Users` | Kayıtlı kullanıcılar / müşteriler | İşlemsel |
+| `Trips` | Seferler (güzergah, saat, fiyat) | İşlemsel |
+| `Tickets` | Satılan biletler (koltuk no, durum) | İşlemsel |
+
+---
+
+## ⭐ Öne Çıkan Özellikler
+
+### 🔐 Veri Güvenliği & Bütünlüğü
+- ✅ **`BEGIN TRANSACTION` + `TRY-CATCH` + `ROLLBACK`** — Herhangi bir hata durumunda işlem tamamen geri alınır
+- ✅ **Composite UNIQUE Constraint** (`TripID + SeatNumber`) — Aynı koltuğun iki kez satılması veritabanı seviyesinde engellenir
+- ✅ **CHECK Constraint** — Varış saati kalkış saatinden önce olamaz
+- ✅ **CHECK Constraint** — Kalkış ve varış aynı terminal olamaz
+- ✅ **`RAISERROR`** — Kullanıcıya anlamlı hata mesajları döndürülür
+
+### ⚙️ İş Mantığı (Stored Procedures)
+| Prosedür | Açıklama |
+|---|---|
+| `sp_SeferAra` | Şehir + tarih filtresiyle sefer arar, **boş koltuk sayısını** hesaplar |
+| `sp_BiletSatinal` | Koltuk kontrolü + kapasite kontrolü + güvenli `INSERT` |
+| `sp_BiletIptal` | Kullanıcı doğrulama + Status güncelleme (`Active` → `Cancelled`) |
+
+### 📊 Raporlama & Sorgulama
+- ✅ **`vw_BiletDetaylari` VIEW** — 7 tablo JOIN'i tek sorguda birleştiren sanal tablo
+- ✅ **GROUP BY + SUM** — Sefer bazlı toplam gelir raporu
+- ✅ **GROUP BY + HAVING** — Doluluk oranı %50 üzerindeki seferler
+- ✅ **TOP + ORDER BY** — En çok bilet alan kullanıcılar
+
+### 🌍 Türkçe Destek
+- ✅ **`Turkish_CI_AS` Collation** — ş, ç, ğ, ü, ö, ı karakterleri desteklenir
+- ✅ **`NVARCHAR`** veri tipi — Tüm metin alanlarda Unicode desteği
+
+---
+
+## 📁 Dosya Yapısı
+
+
+
 
 
