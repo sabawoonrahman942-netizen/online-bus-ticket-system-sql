@@ -1,20 +1,14 @@
-USE BusTicketSystemDB;
+USE 
+    BusTicketSystemDB;
 GO
-
--- ============================================================
--- TABLO 1: Cities (Þehirler)
--- Hiçbir foreign key içermez, en baðýmsýz tablodur.
 -- ============================================================
 CREATE TABLE Cities (
     CityID   INT            IDENTITY(1,1) PRIMARY KEY,
     CityName NVARCHAR(50)   NOT NULL
 );
 GO
-PRINT 'Cities tablosu oluþturuldu.';
+PRINT 'Cities tablosu oluÃ¾turuldu.';
 
--- ============================================================
--- TABLO 2: Terminals (Terminaller / Otogarlar)
--- Bir þehrin birden fazla terminali olabilir (1:N ile Cities'e baðlý)
 -- ============================================================
 CREATE TABLE Terminals (
     TerminalID   INT            IDENTITY(1,1) PRIMARY KEY,
@@ -25,12 +19,9 @@ CREATE TABLE Terminals (
         FOREIGN KEY (CityID) REFERENCES Cities(CityID)
 );
 GO
-PRINT 'Terminals tablosu oluþturuldu.';
+PRINT 'Terminals tablosu oluÃ¾turuldu.';
+-- ============================================================
 
--- ============================================================
--- TABLO 3: Buses (Otobüsler)
--- Hiçbir foreign key içermez.
--- ============================================================
 CREATE TABLE Buses (
     BusID       INT          IDENTITY(1,1) PRIMARY KEY,
     PlateNumber VARCHAR(20)  NOT NULL UNIQUE,
@@ -38,11 +29,8 @@ CREATE TABLE Buses (
     BusType     VARCHAR(10)  NOT NULL CHECK (BusType IN ('2+1', '2+2'))
 );
 GO
-PRINT 'Buses tablosu oluþturuldu.';
+PRINT 'Buses tablosu oluÃ¾turuldu.';
 
--- ============================================================
--- TABLO 4: Users (Kullanýcýlar / Müþteriler)
--- Hiçbir foreign key içermez.
 -- ============================================================
 CREATE TABLE Users (
     UserID       INT            IDENTITY(1,1) PRIMARY KEY,
@@ -54,11 +42,8 @@ CREATE TABLE Users (
     CreatedAt    DATETIME       NOT NULL DEFAULT GETDATE()
 );
 GO
-PRINT 'Users tablosu oluþturuldu.';
+PRINT 'Users tablosu oluÃ¾turuldu.';
 
--- ============================================================
--- TABLO 5: Trips (Seferler)
--- Buses ve Terminals tablolarýna baðýmlýdýr.
 -- ============================================================
 CREATE TABLE Trips (
     TripID              INT            IDENTITY(1,1) PRIMARY KEY,
@@ -69,7 +54,7 @@ CREATE TABLE Trips (
     ArrivalTime         DATETIME       NOT NULL,
     TicketPrice         DECIMAL(10,2)  NOT NULL CHECK (TicketPrice > 0),
 
-    -- Foreign Key Kýsýtlamalarý
+
     CONSTRAINT FK_Trips_Buses
         FOREIGN KEY (BusID) REFERENCES Buses(BusID),
     CONSTRAINT FK_Trips_DepartureTerminal
@@ -77,18 +62,15 @@ CREATE TABLE Trips (
     CONSTRAINT FK_Trips_ArrivalTerminal
         FOREIGN KEY (ArrivalTerminalID) REFERENCES Terminals(TerminalID),
 
-    -- Ýþ Kurallarý (Business Rules)
+
     CONSTRAINT CHK_DifferentTerminals
         CHECK (DepartureTerminalID <> ArrivalTerminalID),
     CONSTRAINT CHK_ValidTripDates
         CHECK (ArrivalTime > DepartureTime)
 );
 GO
-PRINT 'Trips tablosu oluþturuldu.';
+PRINT 'Trips tablosu oluÃ¾turuldu.';
 
--- ============================================================
--- TABLO 6: Tickets (Biletler)
--- Trips ve Users tablolarýna baðýmlýdýr. En son oluþturulur.
 -- ============================================================
 CREATE TABLE Tickets (
     TicketID     INT          IDENTITY(1,1) PRIMARY KEY,
@@ -99,16 +81,16 @@ CREATE TABLE Tickets (
     Status       VARCHAR(20)  NOT NULL DEFAULT 'Active'
                               CHECK (Status IN ('Active', 'Cancelled')),
 
-    -- Foreign Key Kýsýtlamalarý
+rÃ½
     CONSTRAINT FK_Tickets_Trips
         FOREIGN KEY (TripID) REFERENCES Trips(TripID),
     CONSTRAINT FK_Tickets_Users
         FOREIGN KEY (UserID) REFERENCES Users(UserID),
 
-    -- Kompozit Unique Kýsýt: Ayný seferde ayný koltuk iki kez satýlamaz!
+
     CONSTRAINT UQ_Trip_Seat
         UNIQUE (TripID, SeatNumber)
 );
 GO
-PRINT 'Tickets tablosu oluþturuldu.';
-PRINT '>>> Tüm tablolar baþarýyla oluþturuldu!';
+PRINT 'Tickets tablosu oluÃ¾turuldu.';
+PRINT '>>> TÃ¼m tablolar baÃ¾arÃ½yla oluÃ¾turuldu!';
