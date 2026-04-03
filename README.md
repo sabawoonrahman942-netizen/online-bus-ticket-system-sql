@@ -48,5 +48,5 @@ Kullanıcılar sisteme kayıt olabilir, sefer arayabilir, koltuk seçip bilet sa
 
 ---
 
-## 📁 Dosya Yapısı
+
 
