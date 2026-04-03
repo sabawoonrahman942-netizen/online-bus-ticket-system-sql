@@ -2,41 +2,34 @@
 GO
 
 -- =====================================================
--- TEST 1: View ile tüm bilet detaylarını gör
--- =====================================================
+
 SELECT * FROM vw_BiletDetaylari;
 
 -- =====================================================
--- TEST 2: Sefer arama prosedürünü çalıştır
--- =====================================================
+
 EXEC sp_SeferAra
     @KalkisSehir = 'İstanbul',
     @VarisSehir  = 'Ankara',
     @SeferTarihi = '2026-05-10';
 
 -- =====================================================
--- TEST 3: Başarılı bilet satışı
--- =====================================================
+
 EXEC sp_BiletSatinal @TripID = 1, @UserID = 4, @SeatNumber = 22;
 
 -- =====================================================
--- TEST 4: HATA - Dolu koltuğa bilet alma denemesi
--- =====================================================
-EXEC sp_BiletSatinal @TripID = 1, @UserID = 3, @SeatNumber = 5; -- Koltuk 5 zaten Ahmet'in!
+
+EXEC sp_BiletSatinal @TripID = 1, @UserID = 3, @SeatNumber = 5; 
 
 -- =====================================================
--- TEST 5: HATA - Kapasite dışı koltuk denemesi
--- =====================================================
-EXEC sp_BiletSatinal @TripID = 1, @UserID = 3, @SeatNumber = 99; -- 40 koltuklu otobüs!
 
+EXEC sp_BiletSatinal @TripID = 1, @UserID = 3, @SeatNumber = 99; 
 -- =====================================================
 -- TEST 6: Bilet iptali
 -- =====================================================
 EXEC sp_BiletIptal @TicketID = 1, @UserID = 1;
 
 -- =====================================================
--- TEST 7: Raporlama - Seferlerdeki toplam gelir (GROUP BY)
--- =====================================================
+
 SELECT
     tr.TripID,
     dep_city.CityName + ' → ' + arr_city.CityName  AS Guzergah,
@@ -54,8 +47,7 @@ LEFT  JOIN Tickets   t        ON tr.TripID             = t.TripID
 GROUP BY tr.TripID, dep_city.CityName, arr_city.CityName, b.Capacity;
 
 -- =====================================================
--- TEST 8: En çok bilet alan kullanıcı (ORDER BY + TOP)
--- =====================================================
+
 SELECT TOP 3
     u.FirstName + ' ' + u.LastName AS Kullanici,
     COUNT(t.TicketID)              AS BiletSayisi
@@ -66,8 +58,7 @@ GROUP BY u.UserID, u.FirstName, u.LastName
 ORDER BY BiletSayisi DESC;
 
 -- =====================================================
--- TEST 9: Doluluk oranı %50'nin üzerindeki seferler (HAVING)
--- =====================================================
+
 SELECT
     tr.TripID,
     dep_city.CityName + ' → ' + arr_city.CityName  AS Guzergah,
