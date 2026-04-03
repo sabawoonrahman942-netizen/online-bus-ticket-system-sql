@@ -1,8 +1,5 @@
 USE BusTicketSystemDB;
 GO
-
--- ============================================================
--- VIEW: Bilet Detaylar˝ (t¸m JOIN'leri tek sorguda birle˛tirir)
 -- ============================================================
 CREATE VIEW vw_BiletDetaylari AS
 SELECT
@@ -28,11 +25,10 @@ INNER JOIN Cities    dep_city  ON dep_term.CityID        = dep_city.CityID
 INNER JOIN Terminals arr_term  ON tr.ArrivalTerminalID   = arr_term.TerminalID
 INNER JOIN Cities    arr_city  ON arr_term.CityID        = arr_city.CityID;
 GO
-PRINT 'vw_BiletDetaylari view olu˛turuldu.';
+PRINT 'vw_BiletDetaylari view olu√æturuldu.';
 
 -- ============================================================
--- SP 1: Sefer Arama
--- ============================================================
+
 CREATE PROCEDURE sp_SeferAra
     @KalkisSehir NVARCHAR(50),
     @VarisSehir  NVARCHAR(50),
@@ -68,10 +64,8 @@ BEGIN
         b.BusType, b.Capacity, tr.TicketPrice;
 END;
 GO
-PRINT 'sp_SeferAra prosed¸r¸ olu˛turuldu.';
+PRINT 'sp_SeferAra prosed√ºr√º olu√æturuldu.';
 
--- ============================================================
--- SP 2: Bilet Sat˝n Alma (Transaction + TRY-CATCH)
 -- ============================================================
 CREATE PROCEDURE sp_BiletSatinal
     @TripID    INT,
@@ -90,12 +84,12 @@ BEGIN
             WHERE TripID = @TripID AND SeatNumber = @SeatNumber AND Status = 'Active'
         )
         BEGIN
-            RAISERROR('HATA: Bu koltuk zaten sat˝lm˝˛ durumda!', 16, 1);
+            RAISERROR('HATA: Bu koltuk zaten sat√Ωlm√Ω√æ durumda!', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
 
-        -- Kontrol 2: Koltuk numaras˝ geÁerli mi?
+     
         DECLARE @Capacity INT;
         SELECT @Capacity = b.Capacity
         FROM Trips tr
@@ -104,24 +98,24 @@ BEGIN
 
         IF @Capacity IS NULL
         BEGIN
-            RAISERROR('HATA: Belirtilen sefer bulunamad˝!', 16, 1);
+            RAISERROR('HATA: Belirtilen sefer bulunamad√Ω!', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
 
         IF @SeatNumber > @Capacity
         BEGIN
-            RAISERROR('HATA: Koltuk numaras˝ otob¸s kapasitesini (%d) a˛˝yor!', 16, 1, @Capacity);
+            RAISERROR('HATA: Koltuk numaras√Ω otob√ºs kapasitesini (%d) a√æ√Ωyor!', 16, 1, @Capacity);
             ROLLBACK TRANSACTION;
             RETURN;
         END
 
-        -- Her ˛ey yolundaysa bileti ekle
+     
         INSERT INTO Tickets (TripID, UserID, SeatNumber)
         VALUES (@TripID, @UserID, @SeatNumber);
 
         COMMIT TRANSACTION;
-        PRINT 'Bilet ba˛ar˝yla sat˝n al˝nd˝! Koltuk No: ' + CAST(@SeatNumber AS VARCHAR);
+        PRINT 'Bilet ba√æar√Ωyla sat√Ωn al√Ωnd√Ω! Koltuk No: ' + CAST(@SeatNumber AS VARCHAR);
 
     END TRY
     BEGIN CATCH
@@ -133,10 +127,8 @@ BEGIN
     END CATCH
 END;
 GO
-PRINT 'sp_BiletSatinal prosed¸r¸ olu˛turuldu.';
+PRINT 'sp_BiletSatinal prosed√ºr√º olu√æturuldu.';
 
--- ============================================================
--- SP 3: Bilet ›ptal
 -- ============================================================
 CREATE PROCEDURE sp_BiletIptal
     @TicketID INT,
@@ -148,13 +140,13 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Bilet bu kullan˝c˝ya m˝ ait?
+      
         IF NOT EXISTS (
             SELECT 1 FROM Tickets
             WHERE TicketID = @TicketID AND UserID = @UserID AND Status = 'Active'
         )
         BEGIN
-            RAISERROR('HATA: ›ptal edilecek aktif bilet bulunamad˝!', 16, 1);
+            RAISERROR('HATA: √ùptal edilecek aktif bilet bulunamad√Ω!', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
@@ -164,7 +156,7 @@ BEGIN
         WHERE TicketID = @TicketID;
 
         COMMIT TRANSACTION;
-        PRINT 'Bilet ba˛ar˝yla iptal edildi!';
+        PRINT 'Bilet ba√æar√Ωyla iptal edildi!';
 
     END TRY
     BEGIN CATCH
@@ -175,4 +167,4 @@ BEGIN
     END CATCH
 END;
 GO
-PRINT '>>> T¸m VIEW ve Stored Procedure''ler olu˛turuldu!';
+PRINT '>>> T√ºm VIEW ve Stored Procedure''ler olu√æturuldu!';
