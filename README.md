@@ -162,7 +162,7 @@ EXEC sp_BiletIptal @TicketID = 1, @UserID = 1;
 
 <div align="center">
 
-**Rahman**  
+**Fazl Rahman Sabawoon**  
 [@sabawoonrahman942-netizen](https://github.com/sabawoonrahman942-netizen)
 
 ⭐ Bu projeyi beğendiyseniz **star** vermeyi unutmayın!
