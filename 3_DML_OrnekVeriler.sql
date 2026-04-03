@@ -3,17 +3,17 @@ GO
 
 -- Cities
 INSERT INTO Cities (CityName) VALUES
-('İstanbul'), ('Ankara'), ('İzmir'), ('Antalya'), ('Bursa');
+('Ãstanbul'), ('Ankara'), ('Ãzmir'), ('Antalya'), ('Bursa');
 GO
 
 -- Terminals
 INSERT INTO Terminals (CityID, TerminalName) VALUES
-(1, 'Esenler Otogarı'),
-(1, 'Alibeyköy Cep Otogarı'),
-(2, 'AŞTİ'),
-(3, 'İZOTAŞ Otogarı'),
-(4, 'Antalya Otogarı'),
-(5, 'Bursa Otogarı');
+(1, 'Esenler OtogarÃ½'),
+(1, 'AlibeykÃ¶y Cep OtogarÃ½'),
+(2, 'AÃTÃ'),
+(3, 'ÃZOTAÃ OtogarÃ½'),
+(4, 'Antalya OtogarÃ½'),
+(5, 'Bursa OtogarÃ½');
 GO
 
 -- Buses
@@ -25,31 +25,27 @@ GO
 
 -- Users
 INSERT INTO Users (FirstName, LastName, Email, PasswordHash, PhoneNumber) VALUES
-('Ahmet',   'Yılmaz', 'ahmet@email.com',  'hash_ahmet_001',  '05551234567'),
-('Ayşe',    'Demir',  'ayse@email.com',   'hash_ayse_002',   '05329876543'),
+('Ahmet',   'YÃ½lmaz', 'ahmet@email.com',  'hash_ahmet_001',  '05551234567'),
+('AyÃ¾e',    'Demir',  'ayse@email.com',   'hash_ayse_002',   '05329876543'),
 ('Mehmet',  'Kaya',   'mehmet@email.com', 'hash_mehmet_003', '05441112233'),
-('Fatma',   'Çelik',  'fatma@email.com',  'hash_fatma_004',  '05064445566'),
-('Ali',     'Şahin',  'ali@email.com',    'hash_ali_005',    NULL);
+('Fatma',   'Ã‡elik',  'fatma@email.com',  'hash_fatma_004',  '05064445566'),
+('Ali',     'Ãahin',  'ali@email.com',    'hash_ali_005',    NULL);
 GO
-
--- Trips
--- Sefer 1: İstanbul (Esenler) -> Ankara (AŞTİ)
--- Sefer 2: Ankara (AŞTİ)     -> İzmir  (İZOTAŞ)
--- Sefer 3: İstanbul (Esenler) -> Antalya
+-- ============================================================
 INSERT INTO Trips (BusID, DepartureTerminalID, ArrivalTerminalID, DepartureTime, ArrivalTime, TicketPrice) VALUES
 (1, 1, 3, '2026-05-10 09:00:00', '2026-05-10 15:00:00', 500.00),
 (2, 3, 4, '2026-05-11 08:00:00', '2026-05-11 16:00:00', 650.00),
 (3, 1, 5, '2026-05-12 22:00:00', '2026-05-13 06:00:00', 750.00);
 GO
 
--- Tickets (Bilet Satışları)
+
 INSERT INTO Tickets (TripID, UserID, SeatNumber) VALUES
-(1, 1, 5),   -- Ahmet, Sefer 1, Koltuk 5
-(1, 2, 10),  -- Ayşe,  Sefer 1, Koltuk 10
-(1, 3, 15),  -- Mehmet,Sefer 1, Koltuk 15
-(2, 4, 1),   -- Fatma, Sefer 2, Koltuk 1
-(2, 5, 20),  -- Ali,   Sefer 2, Koltuk 20
-(3, 1, 3);   -- Ahmet, Sefer 3, Koltuk 3
+(1, 1, 5), 
+(1, 2, 10),  
+(1, 3, 15),  
+(2, 4, 1),   
+(2, 5, 20),  
+(3, 1, 3);  
 GO
 
-PRINT '>>> Tüm örnek veriler başarıyla eklendi!';
+PRINT '>>> TÃ¼m Ã¶rnek veriler baÃ¾arÃ½yla eklendi!';
